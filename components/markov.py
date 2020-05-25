@@ -124,10 +124,16 @@ class City:
     node : {int : Node}
         A dictionary of nodes, this conform the city.
     """
-    def __init__(self):
-        self.nodes = {}
-        # 0 : House, 1 : Supermarket, 2 : Hospital, 3 : Transportation
-        self.places = { 0 : "House", 1 : "Supermarket", 2 : "Hospital", 3 : "Transportation" }
+    def __init__(self, house1, house2, house3, house4, house5, supermarket, hospital, transportation):
+        self.house1 = house1
+        self.house2 = house2
+        self.house3 = house3
+        self.house4 = house4
+        self.house5 = house5
+        self.supermarket = supermarket
+        self.hospital = hospital
+        self.transportation = transportation
+        self.nodes = [self.house1, self.house2, self.house3, self.house4, self.house5, self.supermarket, self.hospital, self.transportation]
         self.matrix = { "House"          : [0.75, 0.1, 0.05, 0.1],
                         "Supermarket"    : [0.5, 0.4, 0.0, 0.1],
                         "Hospital"       : [0.5, 0.0, 0.4, 0.0],
@@ -135,51 +141,65 @@ class City:
 
     def __str__(self):
         res = ""
-        for key in self.nodes:
-            res += self.nodes[key].place + " : "
-            for _, person in enumerate(self.nodes[key].persons):
+        for _, node in enumerate(self.nodes):
+            res += node.place + " : "
+            for _, person in enumerate(node.persons):
                 res += person.state + "\t"
             res += "\n"
         return res
 
     def update_node_states(self):
-        for key in self.nodes:
-            self.nodes[key].update_matrix()
-            self.nodes[key].update_states()
+        for _, node in enumerate(self.nodes):
+            node.update_matrix()
+            node.update_states()
 
     def move(self):
-        for key in self.nodes:
-            for _, person in enumerate(self.nodes[key].persons):
+        for _, node in enumerate(self.nodes):
+            curr_pos = node.place
+            transition = self.matrix[curr_pos]
+            for _, person in enumerate(node.persons):
                 rand = random()
-                transitions = self.matrix[person.place]
                 total = 0
-                for idx, trans in enumerate(transitions):
+                node.persons.remove(person)
+                for idx, trans in enumerate(transition):
                     total += trans
-                    if total <= rand:
-                        if person in self.nodes[person.node].persons:
-                            self.nodes[person.node].persons.remove(person)
-                            if self.places[idx] == "House":
-                                self.nodes[person.node].persons.append(person)
-                            elif self.places[idx] == "Supermarket":
-                                self.nodes[4].persons.append(person)
-                            elif self.places[idx] == "Hospital":
-                                self.nodes[5].persons.append(person)
-                            elif self.places[idx] == "Transportation":
-                                self.nodes[6].persons.append(person)
+                    if (rand <= total):
+                        if idx == 0:
+                            if person.node == 1:
+                                self.house1.persons.append(person)
+                            elif person.node == 2:
+                                self.house2.persons.append(person)
+                            elif person.node == 3:
+                                self.house3.persons.append(person)
+                            elif person.node == 4:
+                                self.house4.persons.append(person)
+                            else:
+                                self.house5.persons.append(person)
+                        elif idx == 1:
+                            self.supermarket.persons.append(person)
+                        elif idx == 2:
+                            self.hospital.persons.append(person)
+                        else:
+                            self.transportation.persons.append(person)
                         break
 
+
+
 def main():
-    city = City()
     house1 = Node("House", 1)
     house1.generate_persons(10, 0)
     house2 = Node("House", 2)
     house2.generate_persons(10, 1)
     house3 = Node("House", 3)
-    house3.generate_persons(8, 2)
-    supermarket = Node("Supermarket", 4)
-    hospital = Node("Hospital", 5)
-    transportation = Node("Transportation", 6)
-    city.nodes = {1 : house1, 2 : house2, 3 : house3, 4 : supermarket, 5 : hospital, 6 : transportation}
+    house3.generate_persons(10, 2)
+    house4 = Node("House", 4)
+    house4.generate_persons(10, 1)
+    house5 = Node("House", 5)
+    house5.generate_persons(10, 0)
+    supermarket = Node("Supermarket", 6)
+    hospital = Node("Hospital", 7)
+    transportation = Node("Transportation", 8)
+    city = City(house1, house2, house3, house4, house5, supermarket, hospital, transportation)
 
     print(city)
     time.sleep(2)
@@ -187,8 +207,6 @@ def main():
         os.system('cls' if os.name == 'nt' else 'clear')
         city.update_node_states()
         city.move()
-        """ for key in city.nodes:
-            print(len(city.nodes[key].persons)) """
         print(city)
         time.sleep(2)
     

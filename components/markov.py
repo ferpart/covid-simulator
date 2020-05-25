@@ -164,6 +164,12 @@ class City:
                         "Supermarket"    : [0.5, 0.4, 0.0, 0.1],
                         "Hospital"       : [0.5, 0.0, 0.4, 0.0],
                         "Transportation" : [0.6, 0.15, 0.05, 0.2] }
+        self.total = len(house1.persons) + len(house2.persons) + len(house3.persons) + len(house4.persons) + len(house5.persons)
+        self.susceptible = 0
+        self.infected = 0
+        self.recovered = 0
+        self.death
+
 
     def __str__(self):
         res = ""
@@ -178,6 +184,23 @@ class City:
         for _, node in enumerate(self.nodes):
             node.update_matrix()
             node.update_states()
+
+    def update_stats(self):
+        self.susceptible = 0
+        self.infected = 0
+        self.recovered = 0
+        self.death = 0
+        for _, node in enumerate(self.nodes):
+            for _, person in enumerate(node.persons):
+                if person.state == "Susceptible":
+                    self.susceptible += 1
+                elif person.state == "Infected":
+                    self.infected += 1
+                elif person.state == "Recovered":
+                    self.recovered += 1
+                elif person.state == "Death":
+                    self.death += 1
+
 
     def move(self):
         for _, node in enumerate(self.nodes):

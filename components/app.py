@@ -33,27 +33,25 @@ class App:
     def insert_button(self):
         """ method used for adding the start button """
 
-        start_btn = tk.Button(text = "start simulation")
-        # start_btn["command"] = self.simulate
+        start_btn = tk.Button(text = "Start Simulation")
+        start_btn["command"] = self.simulate
 
-        start_btn["command"] = lambda: self.set_text_box([0, 1, 2, 3, 4])
-
-        self.canvas.create_window(325, 300, window = start_btn)
+        self.canvas.create_window(775, 300, window = start_btn)
 
     def insert_icons(self):
         """ method used for adding the graphical location nodes """
 
         #Row 1
-        self.canvas.create_image(100, 75, image= self.house, tags = "house_1")
-        self.canvas.create_image(250, 75, image= self.house, tags = "house_2")
-        self.canvas.create_image(400, 75, image= self.house, tags = "house_3")
-        self.canvas.create_image(550, 75, image= self.house, tags = "house_4")
+        self.canvas.create_image(100, 100, image= self.house, tags = "house_1")
+        self.canvas.create_image(250, 100, image= self.house, tags = "house_2")
+        self.canvas.create_image(400, 100, image= self.house, tags = "house_3")
+        self.canvas.create_image(550, 100, image= self.house, tags = "house_4")
         
         #Row 2
-        self.canvas.create_image(100, 200, image= self.bus, tags = "bus")
-        self.canvas.create_image(250, 200, image= self.hospital, tags = "hospital")
-        self.canvas.create_image(400, 200, image= self.store, tags = "store")
-        self.canvas.create_image(550, 200, image= self.house, tags = "house_5")
+        self.canvas.create_image(100, 250, image= self.bus, tags = "bus")
+        self.canvas.create_image(250, 250, image= self.hospital, tags = "hospital")
+        self.canvas.create_image(400, 250, image= self.store, tags = "store")
+        self.canvas.create_image(550, 250, image= self.house, tags = "house_5")
 
         self.insert_icon_text()
 
@@ -61,16 +59,16 @@ class App:
         """ method used for inserting text inside each node """
         
         #Row 1
-        self.node_text(100, 75, "house_1_txt")
-        self.node_text(250, 75, "house_2_txt")
-        self.node_text(400, 75, "house_3_txt")
-        self.node_text(550, 75, "house_4_txt")
+        self.node_text(100, 100, "house_1_txt")
+        self.node_text(250, 100, "house_2_txt")
+        self.node_text(400, 100, "house_3_txt")
+        self.node_text(550, 100, "house_4_txt")
 
         #Row 2
-        self.node_text(100, 200, "bus_txt")
-        self.node_text(250, 200, "hospital_txt")
-        self.node_text(400, 200, "store_txt")
-        self.node_text(550, 200, "house_5_txt")
+        self.node_text(100, 250, "bus_txt")
+        self.node_text(250, 250, "hospital_txt")
+        self.node_text(400, 250, "store_txt")
+        self.node_text(550, 250, "house_5_txt")
 
     def insert_text_box(self):
         """ method used for inserting text box where total/infected/cured/death/suceptible status will be shown """
@@ -78,7 +76,7 @@ class App:
         text = "Total: 0\nSusceptible: 0\nInfected: 0\nCured: 0\nDead: 0"
 
         self.canvas.create_rectangle(650, 0, self.width, self.height, fill="#FFE6CC", outline="")
-        self.canvas.create_text(660, 10, text=text, tag = "movement_log", fill="black", anchor="nw")
+        self.canvas.create_text(660, self.height/2.5, text=text, tag = "movement_log", fill="black", anchor="w", font="Times 20")
 
     def set_text_box(self, values: list):
         """ method used for setting new text for the text box """
@@ -113,8 +111,3 @@ def image_loader(image_name):
 
     image_folder = Path("components/images/100")
     return (image_folder/image_name)
-
-def main():
-    App()
-
-main()

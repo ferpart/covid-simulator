@@ -2,6 +2,7 @@
 
 import tkinter as tk
 from pathlib import Path
+from .markov import Markov
 
 class App:
     def __init__(self):
@@ -103,8 +104,6 @@ class App:
 
     def simulate(self):
         """ method for th inizialization of the simulation after button has been clicked """
-        
-        print("clicked!")
 
 def image_loader(image_name):
     """ method used for the image loading """

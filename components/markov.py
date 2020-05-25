@@ -2,6 +2,32 @@ import os
 import time
 from random import random
 
+class Markov:
+    def __init__(self):
+        house1 = Node("House", 1)
+        house1.generate_persons(10, 0)
+        house2 = Node("House", 2)
+        house2.generate_persons(10, 1)
+        house3 = Node("House", 3)
+        house3.generate_persons(10, 2)
+        house4 = Node("House", 4)
+        house4.generate_persons(10, 1)
+        house5 = Node("House", 5)
+        house5.generate_persons(10, 0)
+        supermarket = Node("Supermarket", 6)
+        hospital = Node("Hospital", 7)
+        transportation = Node("Transportation", 8)
+        city = City(house1, house2, house3, house4, house5, supermarket, hospital, transportation)
+
+        print(city)
+        time.sleep(2)
+        while 1:
+            os.system('cls' if os.name == 'nt' else 'clear')
+            city.update_node_states()
+            city.move()
+            print(city)
+            time.sleep(2)
+
 class Person:
     """
     A class used to represent a person.
@@ -182,34 +208,3 @@ class City:
                         else:
                             self.transportation.persons.append(person)
                         break
-
-
-
-def main():
-    house1 = Node("House", 1)
-    house1.generate_persons(10, 0)
-    house2 = Node("House", 2)
-    house2.generate_persons(10, 1)
-    house3 = Node("House", 3)
-    house3.generate_persons(10, 2)
-    house4 = Node("House", 4)
-    house4.generate_persons(10, 1)
-    house5 = Node("House", 5)
-    house5.generate_persons(10, 0)
-    supermarket = Node("Supermarket", 6)
-    hospital = Node("Hospital", 7)
-    transportation = Node("Transportation", 8)
-    city = City(house1, house2, house3, house4, house5, supermarket, hospital, transportation)
-
-    print(city)
-    time.sleep(2)
-    while 1:
-        os.system('cls' if os.name == 'nt' else 'clear')
-        city.update_node_states()
-        city.move()
-        print(city)
-        time.sleep(2)
-    
-
-if __name__ == "__main__":
-    main()

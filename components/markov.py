@@ -20,8 +20,6 @@ class Markov:
         transportation = Node("Transportation", 8, "bus_txt")
         self.city = City(house1, house2, house3, house4, house5, supermarket, hospital, transportation)
 
-        #print(self.city)
-
     def hacer_el_trabajo_de_fernando(self, total, infected):
         arr = [ [0, 0],[0, 0], [0, 0], [0, 0], [0, 0] ]
         for i in range(total):
@@ -37,7 +35,6 @@ class Markov:
         self.city.update_node_states()
         self.city.move()
         self.city.update_stats()
-        print(self.city)
 
 class Person:
     """
@@ -253,14 +250,16 @@ class City:
 
     def move(self):
         for _, node in enumerate(self.nodes):
-            curr_pos = node.place
-            transition = self.matrix[curr_pos]
             for _, person in enumerate(node.persons):
+                transition = self.matrix[person.place]
                 rand = random()
                 total = 0
                 for idx, trans in enumerate(transition):
                     total += trans
                     if (rand <= total):
+                        old_place = person.place 
+                        if person.place == "House":
+                            old_place += str(person.node)
                         node.persons.remove(person)
                         if idx == 0 or person.state == "Death":
                             if person.node == 1:
@@ -273,10 +272,20 @@ class City:
                                 self.house4.persons.append(person)
                             else:
                                 self.house5.persons.append(person)
+                            person.place = "House"
+                            break
                         elif idx == 1:
                             self.supermarket.persons.append(person)
+                            person.place = "Supermarket"
                         elif idx == 2:
                             self.hospital.persons.append(person)
+                            person.place = "Hospital"
                         else:
                             self.transportation.persons.append(person)
+                            person.place = "Transportation"
+                        new_place = person.place
+                        if person.place == "House":
+                            new_place += str(person.node)
+                        state = "[" + person.state + "]"
+                        print("{:16} {:15} ----> {:15}".format(state, old_place, new_place))
                         break

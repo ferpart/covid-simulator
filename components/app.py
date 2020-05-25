@@ -155,7 +155,6 @@ class App:
         self.set_text_box(values)
         
         for i in m.city.nodes:
-            print(i.tag)
             self.set_node_text(i.tag, [i.total, i.susceptible, i.infected, i.recovered, i.death])
 
         m.run()

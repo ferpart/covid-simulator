@@ -135,16 +135,23 @@ class App:
         self.start_btn["text"] = "Redo simulation"
         self.stop_btn["state"] = "normal"
 
-        for i in self.sliders:
-            i["state"] = "disabled"
+
             
         total = self.tot.get()
         infected = self.inf.get()
 
         if (total == 0):
             total = 50
+        if (total <= infected):
+            total = infected+1
         if (infected == 0):
             infected = 5
+
+        self.sliders[0].set(total)
+        self.sliders[1].set(infected)
+
+        for i in self.sliders:
+            i["state"] = "disabled"
 
         m = Markov(total, infected)
 

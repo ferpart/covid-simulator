@@ -3,23 +3,33 @@ import time
 from random import random
 
 class Markov:
-    def __init__(self):
+    def __init__(self, total, infected):
+        arr = self.hacer_el_trabajo_de_fernando(total, infected)
         house1 = Node("House", 1, "house_1_txt")
-        house1.generate_persons(10, 0)
+        house1.generate_persons(arr[0][0], arr[0][1])
         house2 = Node("House", 2, "house_2_txt")
-        house2.generate_persons(10, 1)
+        house2.generate_persons(arr[1][0], arr[1][1])
         house3 = Node("House", 3, "house_3_txt")
-        house3.generate_persons(10, 0)
+        house3.generate_persons(arr[2][0], arr[2][1])
         house4 = Node("House", 4, "house_4_txt")
-        house4.generate_persons(10, 0)
+        house4.generate_persons(arr[3][0], arr[3][1])
         house5 = Node("House", 5, "house_5_txt")
-        house5.generate_persons(10, 0)
+        house5.generate_persons(arr[4][0], arr[4][1])
         supermarket = Node("Supermarket", 6, "store_txt")
         hospital = Node("Hospital", 7, "hospital_txt")
         transportation = Node("Transportation", 8, "bus_txt")
         self.city = City(house1, house2, house3, house4, house5, supermarket, hospital, transportation)
 
         #print(self.city)
+
+    def hacer_el_trabajo_de_fernando(self, total, infected):
+        arr = [ [0, 0],[0, 0], [0, 0], [0, 0], [0, 0] ]
+        for i in range(total):
+            arr[i % 5][0] += 1
+        for i in range(infected):
+            arr[i % 5][1] += 1
+        return arr
+
 
 
     def run(self):
@@ -90,6 +100,7 @@ class Node:
         self.infected = 0
         self.recovered = 0
         self.death = 0
+        self.update_stats()
 
     def __str__(self):
         """
@@ -106,6 +117,23 @@ class Node:
         self.infected = 0
         self.recovered = 0
         self.death = 0
+
+    def update_stats(self):
+        self.total = len(self.persons)
+        self.susceptible = 0
+        self.infected = 0
+        self.recovered = 0
+        self.death = 0
+        for _, person in enumerate(self.persons):
+            self.total += 1
+            if person.state == "Susceptible":
+                self.susceptible += 1
+            elif person.state == "Infected":
+                self.death += 1
+            elif person.state == "Recovered":
+                self.recovered += 1
+            elif person.state == "Death":
+                self.death += 1
 
     def generate_persons(self, total, infected):
         """
@@ -183,6 +211,7 @@ class City:
         self.infected = 0
         self.recovered = 0
         self.death = 0
+        self.update_stats()
 
 
     def __str__(self):

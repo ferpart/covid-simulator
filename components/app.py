@@ -14,11 +14,6 @@ class App:
         self.app = tk.Tk()
         self.app.title("Covid Simulator")
 
-        self.bus = image_loader("bus.png")
-        self.hospital = image_loader("hospital.png")
-        self.house = image_loader("house.png")
-        self.store = image_loader("shopping_cart.png")
-
         self.width = 950
         self.height = 350
 
@@ -28,8 +23,14 @@ class App:
         self.canvas = tk.Canvas(frame, bg="white", width = self.width, height = self.height)
         self.canvas.pack()
 
+        bus = image_loader("bus.png")
+        hospital = image_loader("hospital.png")
+        house = image_loader("house.png")
+        store = image_loader("shopping_cart.png")
+
+        self.insert_icons(bus, hospital, house, store)
+
         self.insert_box()
-        self.insert_icons()
         self.insert_button()        
 
         self.app.mainloop()
@@ -47,20 +48,20 @@ class App:
         self.canvas.create_window(730, 310, window = self.start_btn)
         self.canvas.create_window(870, 310, window = self.stop_btn)
 
-    def insert_icons(self):
+    def insert_icons(self, bus, hospital, house, store):
         """ method used for adding the graphical location nodes """
 
         #Row 1
-        self.canvas.create_image(100, 100, image= self.house, tags = "house_1")
-        self.canvas.create_image(250, 100, image= self.house, tags = "house_2")
-        self.canvas.create_image(400, 100, image= self.house, tags = "house_3")
-        self.canvas.create_image(550, 100, image= self.house, tags = "house_4")
+        self.canvas.create_image(100, 100, image= house, tags = "house_1")
+        self.canvas.create_image(250, 100, image= house, tags = "house_2")
+        self.canvas.create_image(400, 100, image= house, tags = "house_3")
+        self.canvas.create_image(550, 100, image= house, tags = "house_4")
         
         #Row 2
-        self.canvas.create_image(100, 250, image= self.bus, tags = "bus")
-        self.canvas.create_image(250, 250, image= self.hospital, tags = "hospital")
-        self.canvas.create_image(400, 250, image= self.store, tags = "store")
-        self.canvas.create_image(550, 250, image= self.house, tags = "house_5")
+        self.canvas.create_image(100, 250, image= bus, tags = "bus")
+        self.canvas.create_image(250, 250, image= hospital, tags = "hospital")
+        self.canvas.create_image(400, 250, image= store, tags = "store")
+        self.canvas.create_image(550, 250, image= house, tags = "house_5")
 
         self.insert_icon_text()
 

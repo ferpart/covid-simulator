@@ -9,9 +9,9 @@ class Markov:
         house2 = Node("House", 2, "house_2_txt")
         house2.generate_persons(10, 1)
         house3 = Node("House", 3, "house_3_txt")
-        house3.generate_persons(10, 2)
+        house3.generate_persons(10, 0)
         house4 = Node("House", 4, "house_4_txt")
-        house4.generate_persons(10, 1)
+        house4.generate_persons(10, 0)
         house5 = Node("House", 5, "house_5_txt")
         house5.generate_persons(10, 0)
         supermarket = Node("Supermarket", 6, "store_txt")
@@ -19,7 +19,7 @@ class Markov:
         transportation = Node("Transportation", 8, "bus_txt")
         self.city = City(house1, house2, house3, house4, house5, supermarket, hospital, transportation)
 
-        print(self.city)
+        #print(self.city)
 
 
     def run(self):
@@ -81,8 +81,8 @@ class Node:
         self.persons = []
         # 0: Susceptible, 1: Sick, 2: Recovered, 3: Death
         self.states = { 0 : "Susceptible", 1 : "Infected", 2 : "Recovered", 3 : "Death"}
-        self.matrix = { "Susceptible" : [0.8, 0.2, 0.0, 0.0],
-                        "Infected"    : [0.0, 0.8, 0.15, 0.05],
+        self.matrix = { "Susceptible" : [0.925, 0.075, 0.0, 0.0],
+                        "Infected"    : [0.0, 0.9, 0.09, 0.01],
                         "Recovered"   : [0.0, 0.0, 1.0, 0.0],
                         "Death"       : [0.0, 0.0, 0.0, 1.0] }
         self.total = len(self.persons)
@@ -100,22 +100,12 @@ class Node:
             res += person.state + '\n'
         return res
 
-    def update_stats(self):
+    def reset_stats(self):
         self.total = 0
         self.susceptible = 0
         self.infected = 0
         self.recovered = 0
         self.death = 0
-        for _, person in enumerate(self.persons):
-            self.total += 1
-            if person.state == "Susceptible":
-                self.susceptible += 1
-            elif person.state == "Infected":
-                self.death += 1
-            elif person.state == "Recovered":
-                self.recovered += 1
-            elif person.state == "Death":
-                self.death += 1
 
     def generate_persons(self, total, infected):
         """
@@ -141,8 +131,8 @@ class Node:
             if person.state == 'Infected':
                 infected += 1
         if infected > 0:
-            self.matrix["Susceptible"][0] = 0.9
-            self.matrix["Susceptible"][1] = 0.1
+            self.matrix["Susceptible"][0] = 0.925
+            self.matrix["Susceptible"][1] = 0.075
         else:
             self.matrix["Susceptible"][0] = 1.0
             self.matrix["Susceptible"][1] = 0.0
@@ -215,16 +205,21 @@ class City:
         self.recovered = 0
         self.death = 0
         for _, node in enumerate(self.nodes):
+            node.reset_stats()
             for _, person in enumerate(node.persons):
+                node.total += 1
                 if person.state == "Susceptible":
                     self.susceptible += 1
+                    node.susceptible += 1
                 elif person.state == "Infected":
                     self.infected += 1
+                    node.infected += 1
                 elif person.state == "Recovered":
                     self.recovered += 1
+                    node.recovered += 1
                 elif person.state == "Death":
                     self.death += 1
-            node.update_stats()
+                    node.death += 1
 
 
     def move(self):
@@ -238,7 +233,7 @@ class City:
                     total += trans
                     if (rand <= total):
                         node.persons.remove(person)
-                        if idx == 0:
+                        if idx == 0 or person.state == "Death":
                             if person.node == 1:
                                 self.house1.persons.append(person)
                             elif person.node == 2:

@@ -3,7 +3,7 @@ import time
 from random import random
 
 class Markov:
-    def __init__(self):
+    def __init__(self, total, infected):
         house1 = Node("House", 1, "house_1_txt")
         house1.generate_persons(10, 0)
         house2 = Node("House", 2, "house_2_txt")

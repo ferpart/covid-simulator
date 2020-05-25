@@ -85,6 +85,11 @@ class Node:
                         "Infected"    : [0.0, 0.8, 0.15, 0.05],
                         "Recovered"   : [0.0, 0.0, 1.0, 0.0],
                         "Death"       : [0.0, 0.0, 0.0, 1.0] }
+        self.total = len(self.persons)
+        self.susceptible = 0
+        self.infected = 0
+        self.recovered = 0
+        self.death = 0
 
     def __str__(self):
         """
@@ -94,6 +99,23 @@ class Node:
         for _, person in enumerate(self.persons):
             res += person.state + '\n'
         return res
+
+    def update_stats(self):
+        self.total = len(self.persons)
+        self.susceptible = 0
+        self.infected = 0
+        self.recovered = 0
+        self.death = 0
+        for _, person in enumerate(self.persons):
+            self.total += 1
+            if person.state == "Susceptible":
+                self.susceptible += 1
+            elif person.state == "Infected":
+                self.death += 1
+            elif person.state == "Recovered":
+                self.recovered += 1
+            elif person.state == "Death":
+                self.death += 1
 
     def generate_persons(self, total, infected):
         """

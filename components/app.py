@@ -75,7 +75,7 @@ class App:
     def insert_text_box(self):
         """ method used for inserting text box where total/infected/cured/death/suceptible status will be shown """
 
-        text = "Total: 0\nSusceptible: 0\nInfected: 0\nCured: 0\nDead: 0"
+        text = "Acumulated Total\n\nTotal: 0\nSusceptible: 0\nInfected: 0\nCured: 0\nDead: 0"
 
         self.canvas.create_rectangle(650, 0, self.width, self.height, fill="#FFE6CC", outline="")
         self.canvas.create_text(660, self.height/2.5, text=text, tag = "movement_log", fill="black", anchor="w", font="Times 20")
@@ -83,7 +83,7 @@ class App:
     def set_text_box(self, values: list):
         """ method used for setting new text for the text box """
         
-        text = "Total: %d\nSusceptible: %d\nInfected: %d\nCured: %d\nDead: %d" %(values[0], values[1], values[2], values[3], values[4]) 
+        text = "Acumulated Total\nTotal: %d\nSusceptible: %d\nInfected: %d\nCured: %d\nDead: %d" %(values[0], values[1], values[2], values[3], values[4]) 
 
         txt_len = self.canvas.itemcget("movement_log", "text")
         self.canvas.dchars("movement_log", 0, len(txt_len))
@@ -113,8 +113,9 @@ class App:
         values = [m.city.total, m.city.susceptible, m.city.infected, m.city.recovered, m.city.death]
         self.set_text_box(values)
         
-        # for i in m.city.nodes:
-        #     self.set_node_text(i.tag, [i.])
+        for i in m.city.nodes:
+            print(i.tag)
+            self.set_node_text(i.tag, [i.total, i.susceptible, i.infected, i.recovered, i.death])
 
         m.run()
         self.app.after(2000, lambda: self.run(m))

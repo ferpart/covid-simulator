@@ -224,6 +224,7 @@ class City:
                     self.recovered += 1
                 elif person.state == "Death":
                     self.death += 1
+            node.update_stats()
 
 
     def move(self):

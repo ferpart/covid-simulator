@@ -20,7 +20,7 @@ class Markov:
         transportation = Node("Transportation", 8, "bus_txt")
         self.city = City(house1, house2, house3, house4, house5, supermarket, hospital, transportation)
 
-        #print(self.city)
+        print(self.city)
 
     def hacer_el_trabajo_de_fernando(self, total, infected):
         arr = [ [0, 0],[0, 0], [0, 0], [0, 0], [0, 0] ]

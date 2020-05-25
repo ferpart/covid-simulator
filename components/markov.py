@@ -57,6 +57,11 @@ class Node:
                         "Infected"    : [0.0, 0.8, 0.15, 0.05],
                         "Recovered"   : [0.0, 0.0, 1.0, 0.0],
                         "Death"       : [0.0, 0.0, 0.0, 1.0] }
+        self.total = len(self.persons)
+        self.susceptible = 0
+        self.infected = 0
+        self.recovered = 0
+        self.death = 0
 
     def __str__(self):
         """
@@ -66,6 +71,23 @@ class Node:
         for _, person in enumerate(self.persons):
             res += person.state + '\n'
         return res
+
+    def update_stats(self):
+        self.total = len(self.persons)
+        self.susceptible = 0
+        self.infected = 0
+        self.recovered = 0
+        self.death = 0
+        for _, person in enumerate(self.persons):
+            self.total += 1
+            if person.state == "Susceptible":
+                self.susceptible += 1
+            elif person.state == "Infected":
+                self.death += 1
+            elif person.state == "Recovered":
+                self.recovered += 1
+            elif person.state == "Death":
+                self.death += 1
 
     def generate_persons(self, total, infected):
         """
@@ -136,8 +158,13 @@ class City:
         self.nodes = [self.house1, self.house2, self.house3, self.house4, self.house5, self.supermarket, self.hospital, self.transportation]
         self.matrix = { "House"          : [0.75, 0.1, 0.05, 0.1],
                         "Supermarket"    : [0.5, 0.4, 0.0, 0.1],
-                        "Hospital"       : [0.5, 0.0, 0.4, 0.0],
+                        "Hospital"       : [0.5, 0.0, 0.4, 0.1],
                         "Transportation" : [0.6, 0.15, 0.05, 0.2] }
+        self.total = len(house1.persons) + len(house2.persons) + len(house3.persons) + len(house4.persons) + len(house5.persons)
+        self.susceptible = 0
+        self.infected = 0
+        self.recovered = 0
+        self.death = 0
 
     def __str__(self):
         res = ""
@@ -153,6 +180,23 @@ class City:
             node.update_matrix()
             node.update_states()
 
+    def update_stats(self):
+        self.susceptible = 0
+        self.infected = 0
+        self.recovered = 0
+        self.death = 0
+        for _, node in enumerate(self.nodes):
+            for _, person in enumerate(node.persons):
+                if person.state == "Susceptible":
+                    self.susceptible += 1
+                elif person.state == "Infected":
+                    self.infected += 1
+                elif person.state == "Recovered":
+                    self.recovered += 1
+                elif person.state == "Death":
+                    self.death += 1
+            node.update_stats()
+
     def move(self):
         for _, node in enumerate(self.nodes):
             curr_pos = node.place
@@ -160,10 +204,10 @@ class City:
             for _, person in enumerate(node.persons):
                 rand = random()
                 total = 0
-                node.persons.remove(person)
                 for idx, trans in enumerate(transition):
                     total += trans
                     if (rand <= total):
+                        node.persons.remove(person)
                         if idx == 0:
                             if person.node == 1:
                                 self.house1.persons.append(person)
@@ -207,7 +251,13 @@ def main():
         os.system('cls' if os.name == 'nt' else 'clear')
         city.update_node_states()
         city.move()
+        city.update_stats()
         print(city)
+        print(city.total)
+        print(city.susceptible)
+        print(city.infected)
+        print(city.recovered)
+        print(city.death)
         time.sleep(2)
     
 

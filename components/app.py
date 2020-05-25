@@ -1,6 +1,7 @@
 """ Gui class used for the covid simulation """
 
 import tkinter as tk
+import threading
 from pathlib import Path
 from .markov import Markov
 
@@ -103,7 +104,22 @@ class App:
         self.canvas.insert(tag, 0, text)
 
     def simulate(self):
-        """ method for th inizialization of the simulation after button has been clicked """
+        """ method for the inizialization of the simulation after button has been clicked """
+        print("test")
+        m = Markov()
+        self.run(m)
+
+    def run(self, m):
+        values = [m.city.total, m.city.susceptible, m.city.infected, m.city.recovered, m.city.death]
+        self.set_text_box(values)
+        
+        # for i in m.city.nodes:
+        #     self.set_node_text(i.tag, [i.])
+
+        m.run()
+        self.app.after(2000, lambda: self.run(m))
+        
+
 
 def image_loader(image_name):
     """ method used for the image loading """

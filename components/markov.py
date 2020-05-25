@@ -4,29 +4,30 @@ from random import random
 
 class Markov:
     def __init__(self):
-        house1 = Node("House", 1)
+        house1 = Node("House", 1, "house_1_txt")
         house1.generate_persons(10, 0)
-        house2 = Node("House", 2)
+        house2 = Node("House", 2, "house_2_txt")
         house2.generate_persons(10, 1)
-        house3 = Node("House", 3)
+        house3 = Node("House", 3, "house_3_txt")
         house3.generate_persons(10, 2)
-        house4 = Node("House", 4)
+        house4 = Node("House", 4, "house_4_txt")
         house4.generate_persons(10, 1)
-        house5 = Node("House", 5)
+        house5 = Node("House", 5, "house_5_txt")
         house5.generate_persons(10, 0)
-        supermarket = Node("Supermarket", 6)
-        hospital = Node("Hospital", 7)
-        transportation = Node("Transportation", 8)
-        city = City(house1, house2, house3, house4, house5, supermarket, hospital, transportation)
+        supermarket = Node("Supermarket", 6, "store_txt")
+        hospital = Node("Hospital", 7, "hospital_txt")
+        transportation = Node("Transportation", 8, "bus_txt")
+        self.city = City(house1, house2, house3, house4, house5, supermarket, hospital, transportation)
 
-        print(city)
-        time.sleep(2)
-        while 1:
-            os.system('cls' if os.name == 'nt' else 'clear')
-            city.update_node_states()
-            city.move()
-            print(city)
-            time.sleep(2)
+        print(self.city)
+
+
+    def run(self):
+        os.system('cls' if os.name == 'nt' else 'clear')
+        self.city.update_node_states()
+        self.city.move()
+        self.city.update_stats()
+        print(self.city)
 
 class Person:
     """
@@ -73,7 +74,8 @@ class Node:
     update_states()
         Updates the state of every person in this place.
     """
-    def __init__(self, place, id):
+    def __init__(self, place, id, tag):
+        self.tag = tag
         self.id = id
         self.place = place
         self.persons = []
@@ -168,7 +170,7 @@ class City:
         self.susceptible = 0
         self.infected = 0
         self.recovered = 0
-        self.death
+        self.death = 0
 
 
     def __str__(self):

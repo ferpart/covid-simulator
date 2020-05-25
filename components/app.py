@@ -14,11 +14,6 @@ class App:
         self.app = tk.Tk()
         self.app.title("Covid Simulator")
 
-        # self.bus = tk.PhotoImage(file = image_loader("bus.png"))
-        # self.hospital = tk.PhotoImage(file = image_loader("hospital.png"))
-        # self.house = tk.PhotoImage(file = image_loader("house.png"))
-        # self.store = tk.PhotoImage(file = image_loader("shopping_cart.png"))
-
         self.bus = image_loader("bus.png")
         self.hospital = image_loader("hospital.png")
         self.house = image_loader("house.png")
@@ -42,10 +37,15 @@ class App:
     def insert_button(self):
         """ method used for adding the start button """
 
-        start_btn = tk.Button(text = "Start Simulation")
-        start_btn["command"] = self.simulate
+        self.start_btn = tk.Button(text = "Start Simulation")
+        self.start_btn["command"] = self.simulate
 
-        self.canvas.create_window(775, 300, window = start_btn)
+        self.stop_btn = tk.Button(text = "Stop Simulation")
+        self.stop_btn["state"] = "disabled"
+        self.stop_btn["command"] = self.stop
+
+        self.canvas.create_window(775, 275, window = self.start_btn)
+        self.canvas.create_window(775, 310, window = self.stop_btn)
 
     def insert_icons(self):
         """ method used for adding the graphical location nodes """
@@ -90,7 +90,7 @@ class App:
     def set_text_box(self, values: list):
         """ method used for setting new text for the text box """
         
-        text = "Acumulated Total\nTotal: %d\nSusceptible: %d\nInfected: %d\nCured: %d\nDead: %d" %(values[0], values[1], values[2], values[3], values[4]) 
+        text = "Acumulated Total\n\nTotal: %d\nSusceptible: %d\nInfected: %d\nCured: %d\nDead: %d" %(values[0], values[1], values[2], values[3], values[4]) 
 
         txt_len = self.canvas.itemcget("movement_log", "text")
         self.canvas.dchars("movement_log", 0, len(txt_len))
@@ -112,6 +112,9 @@ class App:
 
     def simulate(self):
         """ method for the inizialization of the simulation after button has been clicked """
+        self.start_btn["state"] = "disabled"
+        self.start_btn["text"] = "Redo simulation"
+        self.stop_btn["state"] = "normal"
         print("test")
         m = Markov()
         self.run(m)
@@ -125,7 +128,13 @@ class App:
             self.set_node_text(i.tag, [i.total, i.susceptible, i.infected, i.recovered, i.death])
 
         m.run()
-        self.app.after(2000, lambda: self.run(m))
+        self._job = self.app.after(2000, lambda: self.run(m))
+    
+    def stop(self):
+        self.start_btn["state"] = "normal"
+        self.stop_btn["state"] = "disabled"
+        self.app.after_cancel(self._job)
+        self._job=None
         
 
 

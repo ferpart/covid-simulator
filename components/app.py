@@ -3,6 +3,8 @@
 import tkinter as tk
 import threading
 from pathlib import Path
+from PIL import ImageTk, Image
+
 from .markov import Markov
 
 class App:
@@ -12,10 +14,15 @@ class App:
         self.app = tk.Tk()
         self.app.title("Covid Simulator")
 
-        self.bus = tk.PhotoImage(file = image_loader("bus.png"))
-        self.hospital = tk.PhotoImage(file = image_loader("hospital.png"))
-        self.house = tk.PhotoImage(file = image_loader("house.png"))
-        self.store = tk.PhotoImage(file = image_loader("shopping_cart.png"))
+        # self.bus = tk.PhotoImage(file = image_loader("bus.png"))
+        # self.hospital = tk.PhotoImage(file = image_loader("hospital.png"))
+        # self.house = tk.PhotoImage(file = image_loader("house.png"))
+        # self.store = tk.PhotoImage(file = image_loader("shopping_cart.png"))
+
+        self.bus = image_loader("bus.png")
+        self.hospital = image_loader("hospital.png")
+        self.house = image_loader("house.png")
+        self.store = image_loader("shopping_cart.png")
 
         self.width = 900
         self.height = 350
@@ -126,4 +133,5 @@ def image_loader(image_name):
     """ method used for the image loading """
 
     image_folder = Path("components/images/100")
-    return (image_folder/image_name)
+    img = ImageTk.PhotoImage(Image.open(image_folder/image_name))
+    return (img)
